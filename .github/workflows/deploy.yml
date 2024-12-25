@@ -1,0 +1,37 @@
+name: Hugo Deploy
+
+on:
+  push:
+    branches:
+      - main  # 监听 main 分支的推送事件
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 在 Ubuntu 环境下运行
+
+    steps:
+    # Step 1: Checkout 仓库代码
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        ref: main  # 使用 main 分支的代码
+
+    # Step 2: 设置 Hugo 环境
+    - name: Set up Hugo
+      uses: peaceiris/actions-hugo@v2  # 使用 Hugo 的 GitHub Action
+      with:
+        hugo-version: '0.94.2'  # 设置 Hugo 的版本（可根据需要调整）
+
+    # Step 3: 构建 Hugo 网站
+    - name: Build Hugo website
+      run: hugo  # 使用 Hugo 构建静态文件
+
+    # Step 4: 部署到 GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3  # 使用 gh-pages Action 来部署
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 自动生成的令牌
+        publish_dir: ./public  # 指定构建输出的目录（即 Hugo 构建后的静态文件）
+        user_name: 'vonrain'  # 你的 GitHub 用户名
+        user_email: '277960419@qq.com'  # 你的 GitHub 用户邮箱
+
